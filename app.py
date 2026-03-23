@@ -12,10 +12,10 @@ SPOTIFY_CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 
 mood_queries = {
-    "happy": "upbeat happy pop feel good",
-    "sad": "sad emotional piano acoustic",
-    "calm": "calm relaxing ambient instrumental",
-    "energetic": "high energy workout edm hip hop"
+    "happy": "happy pop",
+    "sad": "sad acoustic",
+    "calm": "calm chill",
+    "energetic": "workout dance"
 }
 
 def get_spotify_token():
@@ -34,6 +34,7 @@ def get_spotify_token():
 
     response = requests.post(url, headers=headers, data=data)
     response.raise_for_status()
+
     return response.json()["access_token"]
 
 def search_tracks(query, limit=5):
