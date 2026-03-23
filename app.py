@@ -12,10 +12,10 @@ SPOTIFY_CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 
 mood_queries = {
-    "happy": "happy upbeat pop",
-    "sad": "sad acoustic mellow",
-    "calm": "calm ambient chill",
-    "energetic": "energetic workout dance"
+    "happy": "upbeat happy pop feel good",
+    "sad": "sad emotional piano acoustic",
+    "calm": "calm relaxing ambient instrumental",
+    "energetic": "high energy workout edm hip hop"
 }
 
 def get_spotify_token():
@@ -58,7 +58,18 @@ def search_tracks(query, limit=5):
     for item in items:
         track_name = item["name"]
         artists = ", ".join(artist["name"] for artist in item["artists"])
-        tracks.append(f"{track_name} - {artists}")
+        spotify_url = item["external_urls"]["spotify"]
+
+        image_url = ""
+        if item["album"]["images"]:
+            image_url = item["album"]["images"][-1]["url"]
+
+        tracks.append({
+            "name": track_name,
+            "artists": artists,
+            "url": spotify_url,
+            "image": image_url
+        })
 
     return tracks
 

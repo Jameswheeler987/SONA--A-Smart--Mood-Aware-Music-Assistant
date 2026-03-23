@@ -31,9 +31,19 @@
 
     {% if songs %}
         <h2>Recommended Songs:</h2>
-        <ul>
+        <ul style="list-style: none; padding: 0;">
             {% for song in songs %}
-                <li>{{ song }}</li>
+                <li style="margin-bottom: 20px; display: flex; align-items: center; gap: 15px;">
+                    {% if song.image %}
+                        <img src="{{ song.image }}" alt="Album cover" width="80">
+                    {% endif %}
+
+                    <div>
+                        <a href="{{ song.url }}" target="_blank">
+                            {{ song.name }} - {{ song.artists }}
+                        </a>
+                    </div>
+                </li>
             {% endfor %}
         </ul>
     {% endif %}
