@@ -8,6 +8,7 @@
 </head>
 <body>
     <div class="container">
+
         <header class="hero">
             <h1>SONA 🎵</h1>
             <p>Your smart mood-aware music assistant</p>
@@ -16,15 +17,29 @@
         <section class="form-section">
             <form method="POST" class="mood-form">
                 <label for="mood">Select your mood:</label>
+
                 <select name="mood" id="mood">
                     <option value="happy">Happy</option>
                     <option value="sad">Sad</option>
                     <option value="calm">Calm</option>
                     <option value="energetic">Energetic</option>
+                    <option value="focus">Focus</option>
+                    <option value="party">Party</option>
+                    <option value="romantic">Romantic</option>
                 </select>
-                <button type="submit">Get Music</button>
+
+                <button type="submit" onclick="this.innerText='Loading...'">
+                    Get Music
+                </button>
             </form>
         </section>
+
+        <!-- Default message -->
+        {% if not mood %}
+            <p style="text-align: center; margin-top: 20px;">
+                Select a mood to get started 🎵
+            </p>
+        {% endif %}
 
         {% if mood %}
             <section class="results-header">
@@ -58,6 +73,7 @@
                 </div>
             </section>
         {% endif %}
+
     </div>
 </body>
 </html>
