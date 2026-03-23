@@ -5,6 +5,37 @@
 </head>
 <body>
     <h1>Welcome to Sona 🎵</h1>
-    <p>Mood-based music recommendations coming soon.</p>
+
+    <!-- Mood Selection Form -->
+    <form method="POST">
+        <label>Select your mood:</label>
+        <br><br>
+
+        <select name="mood">
+            <option value="happy">Happy</option>
+            <option value="sad">Sad</option>
+            <option value="calm">Calm</option>
+            <option value="energetic">Energetic</option>
+        </select>
+
+        <br><br>
+        <button type="submit">Get Music</button>
+    </form>
+
+    <!-- Display Selected Mood -->
+    {% if mood %}
+        <h2>You selected: {{ mood }}</h2>
+    {% endif %}
+
+    <!-- Display Recommended Songs -->
+    {% if songs %}
+        <h2>Recommended Songs:</h2>
+        <ul>
+            {% for song in songs %}
+                <li>{{ song }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
 </body>
 </html>
