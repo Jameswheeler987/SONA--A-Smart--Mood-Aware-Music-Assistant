@@ -1,51 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sona</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Welcome to Sona 🎵</h1>
+    <div class="container">
+        <header class="hero">
+            <h1>SONA 🎵</h1>
+            <p>Your smart mood-aware music assistant</p>
+        </header>
 
-    <form method="POST">
-        <label>Select your mood:</label>
-        <br><br>
+        <section class="form-section">
+            <form method="POST" class="mood-form">
+                <label for="mood">Select your mood:</label>
+                <select name="mood" id="mood">
+                    <option value="happy">Happy</option>
+                    <option value="sad">Sad</option>
+                    <option value="calm">Calm</option>
+                    <option value="energetic">Energetic</option>
+                </select>
+                <button type="submit">Get Music</button>
+            </form>
+        </section>
 
-        <select name="mood">
-            <option value="happy">Happy</option>
-            <option value="sad">Sad</option>
-            <option value="calm">Calm</option>
-            <option value="energetic">Energetic</option>
-        </select>
+        {% if mood %}
+            <section class="results-header">
+                <h2>You selected: <span>{{ mood }}</span></h2>
+            </section>
+        {% endif %}
 
-        <br><br>
-        <button type="submit">Get Music</button>
-    </form>
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
+        {% endif %}
 
-    {% if mood %}
-        <h2>You selected: {{ mood }}</h2>
-    {% endif %}
+        {% if songs %}
+            <section class="songs-section">
+                <h2>Recommended Songs</h2>
 
-    {% if error %}
-        <p>{{ error }}</p>
-    {% endif %}
+                <div class="songs-grid">
+                    {% for song in songs %}
+                        <div class="song-card">
+                            {% if song.image %}
+                                <img src="{{ song.image }}" alt="Album cover" class="album-cover">
+                            {% endif %}
 
-    {% if songs %}
-        <h2>Recommended Songs:</h2>
-        <ul style="list-style: none; padding: 0;">
-            {% for song in songs %}
-                <li style="margin-bottom: 20px; display: flex; align-items: center; gap: 15px;">
-                    {% if song.image %}
-                        <img src="{{ song.image }}" alt="Album cover" width="80">
-                    {% endif %}
-
-                    <div>
-                        <a href="{{ song.url }}" target="_blank">
-                            {{ song.name }} - {{ song.artists }}
-                        </a>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+                            <div class="song-info">
+                                <a href="{{ song.url }}" target="_blank" class="song-link">
+                                    {{ song.name }}
+                                </a>
+                                <p class="artist-name">{{ song.artists }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+    </div>
 </body>
 </html>
