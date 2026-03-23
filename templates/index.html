@@ -6,7 +6,6 @@
 <body>
     <h1>Welcome to Sona 🎵</h1>
 
-    <!-- Mood Selection Form -->
     <form method="POST">
         <label>Select your mood:</label>
         <br><br>
@@ -22,12 +21,14 @@
         <button type="submit">Get Music</button>
     </form>
 
-    <!-- Display Selected Mood -->
     {% if mood %}
         <h2>You selected: {{ mood }}</h2>
     {% endif %}
 
-    <!-- Display Recommended Songs -->
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+
     {% if songs %}
         <h2>Recommended Songs:</h2>
         <ul>
@@ -36,6 +37,5 @@
             {% endfor %}
         </ul>
     {% endif %}
-
 </body>
 </html>
