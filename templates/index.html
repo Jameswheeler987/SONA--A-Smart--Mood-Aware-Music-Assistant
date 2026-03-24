@@ -28,22 +28,37 @@
                     <option value="romantic">Romantic</option>
                 </select>
 
+                <label for="activity">Select your activity:</label>
+
+                <select name="activity" id="activity">
+                    <option value="studying">Studying</option>
+                    <option value="working-out">Working Out</option>
+                    <option value="relaxing">Relaxing</option>
+                    <option value="commuting">Commuting</option>
+                    <option value="sleeping">Sleeping</option>
+                    <option value="partying">Partying</option>
+                </select>
+
                 <button type="submit" onclick="this.innerText='Loading...'">
                     Get Music
                 </button>
             </form>
         </section>
 
-        <!-- Default message -->
-        {% if not mood %}
+        {% if not mood and not activity %}
             <p style="text-align: center; margin-top: 20px;">
-                Select a mood to get started 🎵
+                Select a mood and activity to get started 🎵
             </p>
         {% endif %}
 
-        {% if mood %}
+        {% if mood and activity %}
             <section class="results-header">
-                <h2>You selected: <span>{{ mood }}</span></h2>
+                <h2>
+                    You selected:
+                    <span>{{ mood }}</span>
+                    +
+                    <span>{{ activity }}</span>
+                </h2>
             </section>
         {% endif %}
 

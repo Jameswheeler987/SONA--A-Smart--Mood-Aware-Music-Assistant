@@ -13,16 +13,28 @@ SPOTIFY_CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 
 mood_queries = {
-    "happy": "happy upbeat pop",
-    "sad": "sad acoustic mellow",
-    "calm": "calm ambient chill",
-    "energetic": "energetic workout dance",
-    "focus": "deep focus instrumental",
-    "party": "party dance hits",
-    "romantic": "romantic love songs"
+    "happy": "happy upbeat",
+    "sad": "sad mellow",
+    "calm": "calm chill",
+    "energetic": "energetic workout",
+    "focus": "focus concentration",
+    "party": "party dance",
+    "romantic": "romantic love"
+}
+
+activity_queries = {
+    "studying": "study instrumental",
+    "working-out": "gym workout",
+    "relaxing": "relax ambient",
+    "commuting": "commute travel",
+    "sleeping": "sleep soft",
+    "partying": "party club"
 }
 
 def get_spotify_token():
+    if not SPOTIFY_CLIENT_ID or not SPOTIFY_CLIENT_SECRET:
+        raise Exception("Missing Spotify credentials in .env file")
+
     auth_string = f"{SPOTIFY_CLIENT_ID}:{SPOTIFY_CLIENT_SECRET}"
     auth_bytes = auth_string.encode("utf-8")
     auth_base64 = base64.b64encode(auth_bytes).decode("utf-8")
@@ -48,8 +60,6 @@ def search_tracks(query, limit=5):
         "Authorization": f"Bearer {token}"
     }
 
-    # Spotify Search only allows limit up to 10
-    # Use random offset to get different results each time
     random_offset = random.randint(0, 20)
 
     params = {
@@ -64,7 +74,6 @@ def search_tracks(query, limit=5):
     response.raise_for_status()
 
     items = response.json()["tracks"]["items"]
-
     random.shuffle(items)
 
     tracks = []
@@ -92,20 +101,31 @@ def search_tracks(query, limit=5):
 @app.route("/", methods=["GET", "POST"])
 def home():
     mood = None
+    activity = None
     songs = []
     error = None
 
     if request.method == "POST":
         mood = request.form.get("mood")
-        query = mood_queries.get(mood)
+        activity = request.form.get("activity")
 
-        if query:
+        mood_text = mood_queries.get(mood, "")
+        activity_text = activity_queries.get(activity, "")
+        combined_query = f"{mood_text} {activity_text}".strip()
+
+        if combined_query:
             try:
-                songs = search_tracks(query)
+                songs = search_tracks(combined_query)
             except Exception as e:
                 error = f"Spotify error: {e}"
 
-    return render_template("index.html", mood=mood, songs=songs, error=error)
+    return render_template(
+        "index.html",
+        mood=mood,
+        activity=activity,
+        songs=songs,
+        error=error
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
