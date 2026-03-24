@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 import os
 import requests
 import base64
+import random
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -37,7 +38,6 @@ def get_spotify_token():
 
     response = requests.post(url, headers=headers, data=data)
     response.raise_for_status()
-
     return response.json()["access_token"]
 
 def search_tracks(query, limit=5):
@@ -47,16 +47,25 @@ def search_tracks(query, limit=5):
     headers = {
         "Authorization": f"Bearer {token}"
     }
+
+    # Spotify Search only allows limit up to 10
+    # Use random offset to get different results each time
+    random_offset = random.randint(0, 20)
+
     params = {
         "q": query,
         "type": "track",
-        "limit": limit
+        "limit": 10,
+        "offset": random_offset,
+        "market": "GB"
     }
 
     response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()
 
     items = response.json()["tracks"]["items"]
+
+    random.shuffle(items)
 
     tracks = []
     for item in items:
@@ -74,6 +83,9 @@ def search_tracks(query, limit=5):
             "url": spotify_url,
             "image": image_url
         })
+
+        if len(tracks) == limit:
+            break
 
     return tracks
 
